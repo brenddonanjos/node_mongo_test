@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="row  justify-content-center">
+            <div class="col-md-10 mt-4">
+                <h3>Insira um cliente</h3>
+                <form id="form-cliente">
+                    <div class="mb-3">
+                        <label for="input-nome" class="form-label">Nome do cliente</label>
+                        <input type="text" class="form-control" id="input-nome" name="input_nome"
+                            aria-describedby="emailHelp">
+                    </div>
+                    <button type="button" id="btn-form-submit" class="btn btn-primary">Salvar</button>
+                </form>
+            </div>
+            <div class="col-md-10 my-3">
+                <hr>
+            </div>
+            <div class="col-md-10">
+                <h4 class="mb-2">Lista de clientes</h4>
+                <table class="table" id="tabela-lista">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nome do cliente</th>
+                            <th scope="col">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        let url = 'http://localhost:3002'
+
+        //função de buscar
+        const getCliente = () => {
+            $.ajax({
+                url: `${url}/clientes`,
+                success: clientes => {
+                    let html = ''
+                    if (clientes.length > 0) {
+                        clientes.forEach(cliente => {
+                            html += `<tr><th scope="row">${cliente._id}</th><td>${cliente.nome}</td><td><button class="btn btn-danger btn-excluir" id="${cliente._id}">Excluir</button></td></tr>`
+                        });
+                    } else {
+                        html = '<tr><td colspan="3" class="text-center">Nenhum registro<td></tr>'
+                    }
+                    $('#tabela-lista tbody').html(html)
+
+                    //ação de apagar
+                    $('.btn-excluir').on('click', function () {
+                        let id = $(this).attr('id')
+                        deleteCliente(id)
+                    })
+                }
+            })
+        }
+
+        //fução de salvar
+        const setCliente = () => {
+            $.ajax({
+                url: `${url}/clientes`,
+                method: 'POST',
+                data: { nome: $("input[name=input_nome]").val() },
+                success: getCliente
+            })
+        }
+
+        //fução de apagar
+        const deleteCliente = (id) => {
+            $.ajax({
+                url: `${url}/clientes/${id}`,
+                method: 'DELETE',
+                data: { nome: $("input[name=input_nome]").val() },
+                success: getCliente
+            })
+        }
+
+
+        $(() => {
+            getCliente()
+            //Ação ao clicar em salvar
+            $('#btn-form-submit').on('click', function () {
+                setCliente()
+            })
+
+        })
+    </script>
+</body>
+
+</html>
