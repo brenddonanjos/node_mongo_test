@@ -26,7 +26,7 @@ jobs:
     needs: build
     steps:
       - name: Run a one-line script
-        run: echo Deply em Dev!
+        run: echo Deploy em Dev!
         
   deploy-hml:
     runs-on: ubuntu-latest
@@ -36,7 +36,7 @@ jobs:
     needs: deploy-dev
     steps:
       - name: Run a one-line script
-        run: echo Deply em Hml!
+        run: echo Deploy em Hml!
         
   deploy-prod:
     runs-on: ubuntu-latest
@@ -46,4 +46,4 @@ jobs:
     needs: deploy-hml
     steps:
       - name: Run a one-line script
-        run: echo Deply em Produção!
+        run: echo Deploy em Produção!
