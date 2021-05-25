@@ -37,7 +37,7 @@ jobs:
                 
   testes:
     runs-on: ubuntu-latest
-    needs: build
+    needs: deploy-hml
     steps:
       - name: Run a one-line script
         run: echo Executa testes de sistema e infra!
@@ -47,7 +47,7 @@ jobs:
     environment: 
       name: prod
       url: 'http://rupestrim.com.br/projeto_inicial_prod'
-    needs: deploy-hml
+    needs: testes
     steps:
       - name: Run a one-line script
         run: echo Deploy em Produção!
